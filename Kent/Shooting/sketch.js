@@ -1,5 +1,11 @@
 let openWindowWidth = 0;
 let openWindowHeight = 0;
+// images
+let bg;
+let studentImg;
+let studentImg2;
+let monsterImg;
+let fireBallImg;
 //kus kohas asetseb object
 var x;
 var y = 200;
@@ -15,18 +21,23 @@ let date;
 let timeToSpawn = 0;
 let spawnRate = 2000;
 
+function preload() {
+  bg = loadImage('assets/hoone.png');
+  monsterImg = loadImage('assets/monster.png');
+  studentImg = loadImage('assets/student.png');
+  studentImg2 = loadImage('assets/student2.png');
+  fireBallImg = loadImage('assets/fireBall.png');
+}
+
 function setup() {
-
+  openWindowWidth = windowWidth/1.3;
+  openWindowHeight = windowHeight/1.3;
   x = windowWidth;
-  kera = new Kera(5, windowWidth / 2, 100,24)
-
-  openWindowWidth = windowWidth/1.5;
-  openWindowHeight = windowHeight/2;
+  kera = new Kera(5, openWindowWidth / 2, openWindowHeight/6, (openWindowWidth + openWindowHeight)/20)
   //tekitab canvase
   createCanvas(openWindowWidth, openWindowHeight);
   noStroke(50);
   fill(100);
-
 
   //kera alustab keskelt
   x = width / 2;
@@ -35,9 +46,7 @@ function setup() {
 }
 
 function draw() {
-
-  background(200);
-
+  background(bg);
   //paneb kera brauseri äärtes seisma
   x = constrain(x, 10, windowWidth - 10);
   kera.move();
@@ -46,7 +55,7 @@ function draw() {
   for (let i = 0; i < fireBalls.length; i++) {
     fireBalls[i].render();
     fireBalls[i].move();
-    if (fireBalls[i].pos.y > openWindowHeight/1.1) {
+    if (fireBalls[i].pos.y > openWindowHeight/1.3) {
       fireBalls.splice(i, 1);
     }
   }
@@ -57,11 +66,11 @@ function draw() {
     let dir = int(random(0, 2));
     let x;
     if (dir == 0) {
-      x = openWindowWidth + 50;
+      x = openWindowWidth + openWindowWidth/10;
     } else {
-      x = 0;
+      x = -openWindowWidth/10;
     }
-    students.push(new Student(3, x, 300, 50, 100, dir));
+    students.push(new Student(3, x, openWindowHeight/1.3, openWindowWidth/10, 100, dir));
     timeToSpawn = date + spawnRate;
     studentCounter ++;
   }
@@ -69,9 +78,9 @@ function draw() {
   for (let i = 0; i < students.length; i++) {
     students[i].move();
     students[i].render();
-    if (students[i].pos.x > (openWindowWidth/2)-students[i].rad && students[i].dir == 1) {
+    if (students[i].pos.x > (openWindowWidth/2)-students[i].rad/2 && students[i].dir == 1) {
       students.splice(i, 1);
-    } else if (students[i].pos.x < (openWindowWidth/2)-students[i].rad && students[i].dir == 0) {
+    } else if (students[i].pos.x < (openWindowWidth/2)-students[i].rad/2 && students[i].dir == 0) {
       students.splice(i, 1);
     }
   }
@@ -92,7 +101,7 @@ function keyPressed () {
 		leftUp = false;
   }
   if (keyCode == 32) {
-		fireBalls.push(new FireBall(10, 30, kera.pos.x, kera.pos.y + kera.rad));
+		fireBalls.push(new FireBall(10, kera.rad, kera.pos.x, kera.pos.y + kera.rad/2));
 	}
 }
 //muudab banneri suurust brauseri suurusele

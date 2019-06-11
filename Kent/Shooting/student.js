@@ -15,6 +15,11 @@ function Student (speed, x, y, rad, health, dir) {
   }
 
   this.render = function () {
-    rect(this.pos.x, this.pos.y, this.rad, this.rad);
+    //rect(this.pos.x, this.pos.y, this.rad, this.rad);
+    if (this.dir == 0) {
+      image(studentImg, this.pos.x, this.pos.y, this.rad, this.rad);
+    } else {
+      image(studentImg2, this.pos.x, this.pos.y, this.rad, this.rad);
+    }
   }
 }

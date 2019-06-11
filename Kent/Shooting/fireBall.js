@@ -4,7 +4,8 @@ function FireBall (speed, rad, x, y) {
   this.pos = createVector(x, y);
 
   this.render = function () {
-    ellipse(this.pos.x, this.pos.y, this.rad, this.rad);
+    //ellipse(this.pos.x, this.pos.y, this.rad, this.rad);
+    image(fireBallImg, this.pos.x-this.rad/2, this.pos.y, this.rad, this.rad);
   }
 
   this.move = function () {
