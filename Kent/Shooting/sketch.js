@@ -6,6 +6,9 @@ let studentImg;
 let studentImg2;
 let monsterImg;
 let fireBallImg;
+let fireBallData;
+let fireBallAnimation = [];
+let fireFrames = [];
 //kus kohas asetseb object
 var x;
 var y = 200;
@@ -20,13 +23,15 @@ let studentCounter = 0;
 let date;
 let timeToSpawn = 0;
 let spawnRate = 2000;
+let AI = false;
 
 function preload() {
   bg = loadImage('assets/hoone.png');
   monsterImg = loadImage('assets/monster.png');
   studentImg = loadImage('assets/student.png');
   studentImg2 = loadImage('assets/student2.png');
-  fireBallImg = loadImage('assets/fireBall.png');
+  fireBallImg = loadImage('assets/fireBallSpriteSheet.png');
+  fireBallData = loadJSON('assets/fireBall.json');
 }
 
 function setup() {
@@ -42,7 +47,14 @@ function setup() {
   //kera alustab keskelt
   x = width / 2;
   y = 100;
-
+  // animations
+  // fireball
+  fireFrames = fireBallData.frames;
+  for (let i = 0; i < fireFrames.length; i++) {
+    let pos = fireFrames[i].position;
+    let img = fireBallImg.get(pos.x, pos.y, pos.w, pos.h);
+    fireBallAnimation.push(img);
+  }
 }
 
 function draw() {
@@ -82,6 +94,12 @@ function draw() {
       students.splice(i, 1);
     } else if (students[i].pos.x < (openWindowWidth/2)-students[i].rad/2 && students[i].dir == 0) {
       students.splice(i, 1);
+    }
+    // dir change
+    if (AI && fireBalls.length > 0) {
+      if (abs(fireBalls[0].pos.x - students[i].pos.x) < 50) {
+        students[i].dirChange();
+      }
     }
   }
 }

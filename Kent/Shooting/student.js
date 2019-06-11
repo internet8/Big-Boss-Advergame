@@ -22,4 +22,12 @@ function Student (speed, x, y, rad, health, dir) {
       image(studentImg2, this.pos.x, this.pos.y, this.rad, this.rad);
     }
   }
+
+  this.dirChange = function () {
+    if (this.dir == 0) {
+      this.dir = 1;
+    } else {
+      this.dir = 0;
+    }
+  }
 }
