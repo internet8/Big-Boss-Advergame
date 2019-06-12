@@ -1,4 +1,4 @@
-function Kera(speed,x,y,rad){
+function Monster (speed,x,y,rad){
   this.speed = speed;
   this.pos = createVector(x,y);
   this.rad = rad;

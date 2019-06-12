@@ -1,6 +1,6 @@
 let openWindowWidth = 0;
 let openWindowHeight = 0;
-// images
+// piltide muutujad
 let bg;
 let studentImg;
 let studentImg2;
@@ -9,21 +9,24 @@ let fireBallImg;
 let fireBallData;
 let fireBallAnimation = [];
 let fireFrames = [];
-//kus kohas asetseb object
-var x;
-var y = 200;
-var kera;
+// monster on koletise objekt
+let monster;
+// kas parem/vasak/tyhik nool on üleval
 let rightUp = true;
 let leftUp = true;
-// tulekera
+let spaceUp = true;
+// tulekera muutujad
 let fireBalls = [];
-// opilased
+let fireBallDmgRad = 10;
+let fireBallMaxDmgRad = 300;
+// opilase muutujad
 let students = [];
 let studentCounter = 0;
 let date;
 let timeToSpawn = 0;
 let spawnRate = 2000;
-let AI = false;
+// GUI
+let dmgGUI;
 
 function preload() {
   bg = loadImage('assets/hoone.png');
@@ -35,45 +38,37 @@ function preload() {
 }
 
 function setup() {
+  // kui kasutaja avab akna, salvestatakse akna suurus siia
   openWindowWidth = windowWidth/1.3;
   openWindowHeight = windowHeight/1.3;
-  x = windowWidth;
-  kera = new Kera(5, openWindowWidth / 2, openWindowHeight/6, (openWindowWidth + openWindowHeight)/20)
+  // koletise objekti loomine
+  monster = new Monster(5, openWindowWidth / 2, openWindowHeight/6, (openWindowWidth + openWindowHeight)/20)
   //tekitab canvase
   createCanvas(openWindowWidth, openWindowHeight);
   noStroke(50);
   fill(100);
 
-  //kera alustab keskelt
-  x = width / 2;
-  y = 100;
-  // animations
-  // fireball
+  // animatioonid
+  // tulemonster kaadrite lisamine
   fireFrames = fireBallData.frames;
   for (let i = 0; i < fireFrames.length; i++) {
     let pos = fireFrames[i].position;
     let img = fireBallImg.get(pos.x, pos.y, pos.w, pos.h);
     fireBallAnimation.push(img);
   }
+
+  // GUI
+  dmgGUI = new GUI(openWindowWidth / 1.3, openWindowHeight / 20, openWindowWidth / 5, openWindowHeight / 20);
 }
 
 function draw() {
   background(bg);
-  //paneb kera brauseri äärtes seisma
-  x = constrain(x, 10, windowWidth - 10);
-  kera.move();
-  kera.render();
-  // tulepall
-  for (let i = 0; i < fireBalls.length; i++) {
-    fireBalls[i].render();
-    fireBalls[i].move();
-    if (fireBalls[i].pos.y > openWindowHeight/1.3) {
-      fireBalls.splice(i, 1);
-    }
-  }
-  // student
+  // koletise funktsioonide v2lja kutsumine
+  monster.move();
+  monster.render();
+  // opilasega seotud toimingud
   date = Date.now();
-  // adding students
+  // opile lisamine vastavalt tekkimise sagedusele
   if (date > timeToSpawn && studentCounter < 5) {
     let dir = int(random(0, 2));
     let x;
@@ -86,22 +81,56 @@ function draw() {
     timeToSpawn = date + spawnRate;
     studentCounter ++;
   }
-  // calling functions for every student
+  // iga opilase kohta kutsutakse funktsioonid
   for (let i = 0; i < students.length; i++) {
     students[i].move();
     students[i].render();
-    if (students[i].pos.x > (openWindowWidth/2)-students[i].rad/2 && students[i].dir == 1) {
+    /*stroke(255);
+    strokeWeight(students[i].rad);
+    point(students[i].pos.x + students[i].rad/2, students[i].pos.y);*/
+    // siia if lausetesse panna leveli kontroll (suurendada mingit muutujat)
+    if (students[i].pos.x > (openWindowWidth/2)-students[i].rad/2 && students[i].dir == 1 && !students[i].isRunning) {
       students.splice(i, 1);
-    } else if (students[i].pos.x < (openWindowWidth/2)-students[i].rad/2 && students[i].dir == 0) {
+      // studentsEncountered ++; (nt midagi sellist igasse if lausesse)
+    } else if (students[i].pos.x < (openWindowWidth/2)-students[i].rad/2 && students[i].dir == 0 && !students[i].isRunning) {
       students.splice(i, 1);
-    }
-    // dir change
-    if (AI && fireBalls.length > 0) {
-      if (abs(fireBalls[0].pos.x - students[i].pos.x) < 50) {
-        students[i].dirChange();
-      }
+    } else if (students[i].pos.x > openWindowWidth+students[i].rad && students[i].dir == 0 && students[i].isRunning) {
+      students.splice(i, 1);
+    } else if (students[i].pos.x < 0 && students[i].dir == 1 && students[i].isRunning) {
+      students.splice(i, 1);
     }
   }
+  // tulemonsterga seotud toimingud
+  for (let i = 0; i < fireBalls.length; i++) {
+    fireBalls[i].render();
+    fireBalls[i].move();
+    if (fireBalls[i].pos.y > openWindowHeight/1.3) {
+      for (let j = 0; j < students.length; j++) {
+        if (abs(fireBalls[i].pos.x - (students[j].pos.x + students[j].rad/2)) < fireBalls[i].dmgRad && !students[j].isRunning) {
+          students[j].dirChange();
+          students[j].speed = students[j].speed * 2;
+          students[j].isRunning = true;
+        }
+      }
+      // play explosion animation here
+      /*stroke(255);
+      strokeWeight(fireBalls[i].dmgRad);
+      point(fireBalls[i].pos.x, fireBalls[i].pos.y);*/
+      fireBalls.splice(i, 1);
+    }
+
+    // siin võiks kontrollida, kas on aeg minna järgmisesse levelisse
+    // if (stidentsEncountered >= leve.studentsCount) -> level = new Level(parameetrid);
+  }
+
+  // tulepalli füüsika (suurendab kahju ulatust)
+  if (fireBallDmgRad < fireBallMaxDmgRad && !spaceUp) {
+    fireBallDmgRad += 2;
+  }
+
+  // GUI funktsioonid
+  dmgGUI.fillPercent = fireBallDmgRad / 3;
+  dmgGUI.render();
 }
 
 function keyReleased () {
@@ -109,6 +138,11 @@ function keyReleased () {
 		rightUp = true;
 	} else if (keyCode == LEFT_ARROW || keyCode == 65) {
 		leftUp = true;
+	}
+  if (keyCode == 32) {
+		fireBalls.push(new FireBall(10, monster.rad, monster.pos.x, monster.pos.y + monster.rad/2, fireBallDmgRad));
+    fireBallDmgRad = 10;
+    spaceUp = true;
 	}
 }
 
@@ -119,7 +153,7 @@ function keyPressed () {
 		leftUp = false;
   }
   if (keyCode == 32) {
-		fireBalls.push(new FireBall(10, kera.rad, kera.pos.x, kera.pos.y + kera.rad/2));
+		spaceUp = false;
 	}
 }
 //muudab banneri suurust brauseri suurusele

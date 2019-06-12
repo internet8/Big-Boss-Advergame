@@ -1,9 +1,10 @@
-function FireBall (speed, rad, x, y) {
+function FireBall (speed, rad, x, y, dmgRad) {
   this.frameCount = 0;
   this.speed = speed;
   this.rad = rad;
   this.pos = createVector(x, y);
   this.startPos = this.pos;
+  this.dmgRad = dmgRad;
 
   this.render = function () {
     //ellipse(this.pos.x, this.pos.y, this.rad, this.rad);
