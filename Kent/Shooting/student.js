@@ -1,4 +1,6 @@
 function Student (speed, x, y, rad, health, dir) {
+  this.frameCountDown = 0;
+  this.frameCount = 0;
   this.health = health;
   this.speed = speed;
   this.rad = rad;
@@ -18,14 +20,28 @@ function Student (speed, x, y, rad, health, dir) {
   this.render = function () {
     //rect(this.pos.x, this.pos.y, this.rad, this.rad);
     if (this.dir == 0) {
-      image(studentImg, this.pos.x, this.pos.y, this.rad, this.rad);
+      //image(studentImg, this.pos.x, this.pos.y, this.rad, this.rad);
+      image(studentAnimation[this.frameCount], this.pos.x-this.rad/2, this.pos.y, this.rad, this.rad);
+      if (this.frameCountDown % 3 == 0) {
+        this.frameCount ++;
+      }
+      if (this.frameCount == 12) {
+        this.frameCount = 0;
+      }
     } else {
-      image(studentImg2, this.pos.x, this.pos.y, this.rad, this.rad);
+      //image(studentImg2, this.pos.x, this.pos.y, this.rad, this.rad);
+      image(studentAnimation2[this.frameCount], this.pos.x-this.rad/2, this.pos.y, this.rad, this.rad);
+      if (this.frameCountDown % 3 == 0) {
+        this.frameCount ++;
+      }
+      if (this.frameCount == 12) {
+        this.frameCount = 0;
+      }
     }
-    // testimine, et näha õpilase positsiooni
-    /* stroke(255);
-    strokeWeight(50);
-    point(this.pos.x + this.rad/2, this.pos.y); */
+    this.frameCountDown ++;
+    if (this.frameCountDown == 36) {
+      this.frameCount ++;
+    }
   }
 
   this.dirChange = function () {

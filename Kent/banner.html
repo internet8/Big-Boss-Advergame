@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" initial-scale=1.0">
+  <meta name="viewport" initial-scale="1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Bänner</title>
   <style media="screen">
@@ -30,6 +30,12 @@
       margin-top: 7.5vh;
       transition: ease-in-out 1s;
     }
+
+    iframe {
+      width: 100vw;
+      height: 100vh;
+      display: block;
+    }
   </style>
   <script>
     let active = false;
@@ -37,16 +43,18 @@
       if (!active) {
         document.getElementById("kast").setAttribute("class", "kast2");
         active = true;
+        document.getElementById("game").style.display="none";
       } else if (active) {
         document.getElementById("kast").setAttribute("class", "kast");
         active = false;
+        document.getElementById("game").style.display="block";
       }
     }
   </script>
 </head>
 <body>
   <div id="kast" class="kast" onclick="changeSize();">
-
+    <iframe id="game" src="Shooting/index.html" frameborder="0"></iframe>
   </div>
 
 </body>
