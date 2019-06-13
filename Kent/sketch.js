@@ -16,6 +16,7 @@ let shootingPrepAnimation = [];
 let monsterAnimation = [];
 // monster on koletise objekt
 let monster;
+let monsterSpeed;
 // kas parem/vasak/tyhik nool on üleval
 let rightUp = true;
 let leftUp = true;
@@ -48,7 +49,7 @@ let gameOver = false;
 let levelSpeed;
 
 function preload() {
-  bg = loadImage('assets/hoone.png');
+  bg = loadImage('assets/hoone2.png');
   monsterImg = loadImage('assets/monster.png');
   studentImg = loadImage('assets/studentboy.png');
   studentGirlImg = loadImage('assets/studentgirl.png');
@@ -65,9 +66,10 @@ function setup() {
   // kui kasutaja avab akna, salvestatakse akna suurus siia
   openWindowWidth = windowWidth/1.3;
   openWindowHeight = windowHeight/1.3;
-  levelSpeed = openWindowWidth/100;
+  levelSpeed = openWindowWidth/500;
+  monsterSpeed = openWindowWidth/200;
   // koletise objekti loomine
-  monster = new Monster(5, openWindowWidth / 2, openWindowHeight/6, (openWindowWidth + openWindowHeight)/20)
+  monster = new Monster(monsterSpeed, openWindowWidth / 2, openWindowHeight/6, (openWindowHeight)/7)
   //tekitab canvase
   createCanvas(openWindowWidth, openWindowHeight);
   noStroke(50);
@@ -108,7 +110,7 @@ function draw() {
   // opilasega seotud toimingud
   date = Date.now();
   // opilase lisamine vastavalt tekkimise sagedusele
-  if (date > timeToSpawn && studentCounter < levelStudentCount) {
+  if (date > timeToSpawn && studentCounter < levelStudentCount && !gameOver) {
     let dir = int(random(0, 2));
     let isGirl = int(random(0, 2));
     let x;
@@ -117,7 +119,7 @@ function draw() {
     } else {
       x = -openWindowWidth/10;
     }
-    students.push(new Student(3, x, openWindowHeight/1.3, openWindowWidth/8, 100, dir, isGirl));
+    students.push(new Student(levelSpeed, x, openWindowHeight/1.3, openWindowWidth/8, 100, dir, isGirl));
     timeToSpawn = date + spawnRate;
     studentCounter ++;
   }
@@ -149,7 +151,7 @@ function draw() {
     fireBalls[i].move();
     if (fireBalls[i].pos.y > openWindowHeight/1.2) {
       for (let j = 0; j < students.length; j++) {
-        if (abs(fireBalls[i].pos.x - (students[j].pos.x)) < fireBalls[i].dmgRad && !students[j].isRunning) {
+        if (abs(fireBalls[i].pos.x - (students[j].pos.x)) < fireBalls[i].dmgRad && !students[j].isRunning && levelNumber != 5) {
           students[j].dirChange();
           students[j].speed = students[j].speed * 2;
           students[j].isRunning = true;
@@ -175,11 +177,16 @@ function draw() {
   // GUI funktsioonid
   dmgGUI.fillPercent = fireBallDmgRad / 3;
   dmgGUI.render();
+  // Kuvatakse leveli numbrit
+  if (!gameOver) {
+    textSize(32);
+    text('Level ' + levelNumber, 10, 30);
+  }
   // kontrollitakse, kas minna järgmisesse levelisse
   if (studentsEncountered >= levelStudentCount && !gameOver){
     nextLevel();
   }
-  if (levelNumber >= 6) {
+  if (levelNumber >= 6 || studentsEncountered == levelStudentCount) {
     gameOver = true;
   }
 }

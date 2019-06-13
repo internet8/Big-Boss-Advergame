@@ -7,9 +7,9 @@ function Monster (speed,x,y,rad){
 
   //kera reageerib nupu vajutustele
   this.move = function(){
-    if((leftUp == false) && (this.pos.x >= openWindowWidth/15)){
+    if((leftUp == false) && (this.pos.x >= openWindowWidth/12)){
       this.pos.x -= this.speed;
-    } else if ((!rightUp) && (this.pos.x <= openWindowWidth/1.12)) {
+    } else if ((!rightUp) && (this.pos.x <= openWindowWidth/1.10)) {
       this.pos.x += this.speed;
     }
   }
