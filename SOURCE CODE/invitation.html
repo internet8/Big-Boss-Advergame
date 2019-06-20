@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Invitation</title>
+</head>
+<style>
+
+    * {
+        font-family: 'Arial';
+    }
+
+    body {
+        background-image: url('assets/tlu_ivar_veermae_copyright_002-kitsas.jpg');
+        background-size: cover;
+        height: 100%;
+        overflow: hidden;
+
+    }
+
+    .logoArea {
+        background-color: rgba(255, 255, 255);
+        width: 110%;
+        height: 10vh;
+        margin-top: -2%;
+        margin-left: -2%;
+        padding-top: 50px;
+        position: fixed;
+    }
+
+    .logo{
+        position: fixed;
+        padding-left: 37.5%;
+        top: 3vh;
+        z-index: -1;
+        width: 50px;
+        height: 65.5px;
+    }
+
+    .logoText {
+      font-size: 24px;
+      padding-bottom: 2vh;
+      font-family: 'Times New Roman';
+      position: fixed;
+      padding-left: 45vw;
+      top: 3vh;
+      z-index: -1;
+      height: 65.5px;
+    }
+
+    .textArea {
+        background-color: rgba(255, 255, 255, 0.85);
+        width: 65%;
+        position: fixed;
+        left: 50%;
+        margin-left: -32.5%;
+        top: 35%;
+    }
+
+    .p1 {
+        font-size: 1.5vw;
+        text-align: center;
+        line-height: 20%;
+    }
+
+    .p2 {
+        font-size: 2vw;
+        font-weight: bold;
+        text-align: center;
+        line-height: 20%;
+    }
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script>
+    let eventData = $.getJSON( "eventData.json", function() {})
+    $( document ).ready(function() {
+        $("#eventName").text(eventData.responseJSON.event[0].name);
+        $("#eventLocation").text(eventData.responseJSON.event[0].location);
+        $("#eventDate").text(eventData.responseJSON.event[0].time);
+        $("#slogan1").text(eventData.responseJSON.event[0].slogan1);
+        $("#slogan2").text(eventData.responseJSON.event[0].slogan2);
+    });
+</script>
+<body>
+    <header>
+        <div class="logoArea">
+            <img src="assets/logo.png" alt="tlu logo" class="logo">
+            <p class="logoText">TALLINN UNIVERSITY</p>
+        </div>
+    </header>
+
+
+    <section class="textArea">
+        <p class="p1">You are invited to</p>
+
+        <p id="eventName" class="p2"></p>
+
+        <p class="p1">The event takes place at</p>
+
+        <p id="eventLocation" class="p2"></p>
+
+        <p class="p1">on</p>
+
+        <p id="eventDate" class="p2"></p>
+
+        <p id="slogan1" class="p2" style="padding-top: 7.5vh;"></p>
+
+        <p id="slogan2" class="p1"></p>
+
+    </section>
+
+
+
+</body>
+</html>
