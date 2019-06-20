@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BigBoss</title>
+    <style> body{padding:0; margin:0;} </style>
+    <!--<script language="javascript" type="text/javascript" src="/p5/addons/p5.dom.js"></script>-->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/p5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <!--<script src="sketch.js"></script>
+    <script src="monster.js"></script>
+    <script src="fireBall.js"></script>
+    <script src="student.js"></script>
+    <script src="dmgGUI.js"></script>
+    <script src="explosion.js"></script>
+    <script src="goIn.js"></script>
+    <script src="cutScene.js"></script>
+    <script src="cloud.js"></script>-->
+    <style>
+		*{
+			font-family: Arial;
+			background-color: white;
+			color: white;
+		}
+		body {
+			margin: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+      background-color: black;
+      overflow: hidden;
+      /*padding-top: 5vh;*/
+		}
+	</style>
+
+  </head>
+  <body>
+    <canvas id="tagasiSide" width="800" height="450">
+      <script>
+          var ctx = document.getElementById('tagasiSide').getContext('2d');
+
+          new Chart(document.getElementById("tagasiSide"), {
+          type: 'bar',
+          data: {
+            labels: ["1", "2", "4", "2", "1"],
+              datasets: [{
+                label: "Keskmine",
+                type: "line",
+                  borderColor: "#000000",
+                data: [1,2,4,2,1],
+                fill: false
+              }, {
+                label: "Teie",
+                type: "bar",
+                backgroundColor: "rgba(255, 0, 0, 0.7)",
+                data: [0,1,2,3,4],
+              }
+            ]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Big Boss AdverGame FeedBack'
+            },
+              legend: { display: false }
+            }
+        });
+      </script>
+    </canvas>
+  </body>
+</html>
