@@ -1,0 +1,4 @@
+Testimine toimus arenduse käigus. Peamiselt testisime uut funktsionaalsust kohe pärast selle kirjutamist. Kui midagi vajas muutmist, teostasime selle.
+Mõned näited testidest: Testisime, kas üliõpilane saab tulepalliga pihta. Selleks joonistasime mänguobjektide punktidesse ringid teatud raadiusega ja kontrollisime, kas nende põrkumisel kood töötab.
+Testisime tagasisidet. Andsime funktsioonile andmeid sisse ning vaatasime tulemt. Kui tulemus oli vigane, parandasime koodi.
+Lõpptulemusena võib öelda, et enamus vigadest on tuvastatud ja parandatud.
